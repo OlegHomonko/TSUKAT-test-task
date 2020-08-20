@@ -5,7 +5,8 @@ Shader "Depth test"
 	Properties
 	{
 		_Texture("Texture", 2D) = "white" {}
-		_MaxVertexoffset("Max Vertex offset", Range( 0 , 2)) = 2
+		_MaxVertexoffset("Max Vertex offset", Range( 0 , 2)) = 0.1120346
+		_Smoothrenge("Smooth renge", Range( 0 , 1)) = 0.2
 		[HideInInspector] _texcoord( "", 2D ) = "white" {}
 	}
 	
@@ -63,9 +64,24 @@ Shader "Depth test"
 				float4 ase_texcoord : TEXCOORD0;
 			};
 
+			uniform float _Smoothrenge;
 			uniform float _MaxVertexoffset;
 			uniform sampler2D _Texture;
 			uniform float4 _Texture_ST;
+			float3 HightMul100( float max , float min , float dis , float3 normal )
+			{
+				if(dis > max)
+				{
+				return float3(0,0,0);
+				}
+				if(dis < min)
+				{
+				return normal;
+				}
+				float val = (max - dis) / (max - min);
+				return lerp(float3(0,0,0), normal, val);
+			}
+			
 			
 			v2f vert ( appdata v )
 			{
@@ -74,22 +90,15 @@ Shader "Depth test"
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 
-				float4 _Vector0 = float4(-0.38,-0.723,-1.906,0.3);
+				float4 _Vector0 = float4(-0.38,-0.723,-1.906,0.1);
+				float max100 = ( _Vector0.w + _Smoothrenge );
+				float min100 = _Vector0.w;
 				float4 appendResult63 = (float4(_Vector0.x , _Vector0.y , _Vector0.z , 0.0));
 				float3 ase_worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
-				float temp_output_51_0 = distance( appendResult63 , float4( ase_worldPos , 0.0 ) );
+				float dis100 = distance( appendResult63 , float4( ase_worldPos , 0.0 ) );
 				float3 ase_worldNormal = UnityObjectToWorldNormal(v.ase_normal);
-				float3 temp_output_47_0 = ( ase_worldNormal * _MaxVertexoffset );
-				float3 lerpResult75 = lerp( float3( 0,0,0 ) , temp_output_47_0 , float3( 0,0,0 ));
-				float temp_output_69_0 = ( _Vector0.w + ( _Vector0.w / 2.0 ) );
-				float3 ifLocalVar50 = 0;
-				if( temp_output_51_0 < temp_output_69_0 )
-				ifLocalVar50 = temp_output_47_0;
-				float3 ifLocalVar74 = 0;
-				if( temp_output_51_0 <= _Vector0.w )
-				ifLocalVar74 = ifLocalVar50;
-				else
-				ifLocalVar74 = lerpResult75;
+				float3 normal100 = ( ase_worldNormal * _MaxVertexoffset );
+				float3 localHightMul100 = HightMul100( max100 , min100 , dis100 , normal100 );
 				
 				o.ase_texcoord.xy = v.ase_texcoord.xy;
 				
@@ -99,7 +108,7 @@ Shader "Depth test"
 				#if ASE_ABSOLUTE_VERTEX_POS
 				vertexValue = v.vertex.xyz;
 				#endif
-				vertexValue = ifLocalVar74;
+				vertexValue = localHightMul100;
 				#if ASE_ABSOLUTE_VERTEX_POS
 				v.vertex.xyz = vertexValue;
 				#else
@@ -129,44 +138,33 @@ Shader "Depth test"
 }
 /*ASEBEGIN
 Version=17101
-366;519;1553;480;3228.292;428.4198;1.604023;True;True
-Node;AmplifyShaderEditor.Vector4Node;42;-2865.627,-519.1288;Inherit;True;Constant;_Vector0;Vector 0;0;0;Create;True;0;0;False;0;-0.38,-0.723,-1.906,0.3;0,0,0,0;0;5;FLOAT4;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.DynamicAppendNode;63;-3067.695,-254.6261;Inherit;False;FLOAT4;4;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT;0;False;1;FLOAT4;0
-Node;AmplifyShaderEditor.WorldPosInputsNode;52;-3153.359,51.25475;Inherit;False;0;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3
-Node;AmplifyShaderEditor.SimpleDivideOpNode;70;-2582.486,-357.1034;Inherit;False;2;0;FLOAT;0;False;1;FLOAT;2;False;1;FLOAT;0
-Node;AmplifyShaderEditor.WorldNormalVector;45;-2958.056,273.8728;Inherit;False;False;1;0;FLOAT3;0,0,1;False;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3
-Node;AmplifyShaderEditor.RangedFloatNode;46;-2987.746,481.2609;Inherit;False;Property;_MaxVertexoffset;Max Vertex offset;1;0;Create;True;0;0;False;0;2;0.2;0;2;0;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;69;-2417.617,-400.4572;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.DistanceOpNode;51;-2810.062,-184.6305;Inherit;False;2;0;FLOAT4;0,0,0,0;False;1;FLOAT3;0,0,0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleMultiplyOpNode;47;-2711.689,309.788;Inherit;False;2;2;0;FLOAT3;0,0,0;False;1;FLOAT;0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.ConditionalIfNode;50;-2379.167,-43.55625;Inherit;False;False;5;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT3;0,0,0;False;4;FLOAT3;0,0,0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.LerpOp;75;-2065.129,-219.691;Inherit;False;3;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;2;FLOAT3;0,0,0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.SimpleDivideOpNode;78;-2186.36,-327.9909;Inherit;False;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.ConditionalIfNode;74;-1898.509,-70.16064;Inherit;False;False;5;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT3;0,0,0;False;3;FLOAT3;0,0,0;False;4;FLOAT3;0,0,0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.SamplerNode;44;-1518.811,-407.9617;Inherit;True;Property;_Texture;Texture;0;0;Create;True;0;0;False;0;None;34685b7c2d8997347906dccf3f45db7d;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+366;519;1553;480;3573.014;549.813;1.778142;True;True
+Node;AmplifyShaderEditor.Vector4Node;42;-2985.763,-401.7529;Inherit;True;Constant;_Vector0;Vector 0;0;0;Create;True;0;0;False;0;-0.38,-0.723,-1.906,0.1;0,0,0,0;0;5;FLOAT4;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.WorldNormalVector;45;-2834.201,407.002;Inherit;False;False;1;0;FLOAT3;0,0,1;False;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3
+Node;AmplifyShaderEditor.RangedFloatNode;46;-2893.065,580.9064;Inherit;False;Property;_MaxVertexoffset;Max Vertex offset;1;0;Create;True;0;0;False;0;0.1120346;0.2;0;2;0;1;FLOAT;0
+Node;AmplifyShaderEditor.WorldPosInputsNode;52;-2850.297,173.9649;Inherit;False;0;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3
+Node;AmplifyShaderEditor.RangedFloatNode;101;-2569.177,-485.8426;Inherit;False;Property;_Smoothrenge;Smooth renge;2;0;Create;True;0;0;False;0;0.2;0.5;0;1;0;1;FLOAT;0
+Node;AmplifyShaderEditor.DynamicAppendNode;63;-2601.045,-395.0809;Inherit;False;FLOAT4;4;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT;0;False;1;FLOAT4;0
+Node;AmplifyShaderEditor.DistanceOpNode;51;-2507,-61.92036;Inherit;False;2;0;FLOAT4;0,0,0,0;False;1;FLOAT3;0,0,0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;47;-2577.416,455.42;Inherit;False;2;2;0;FLOAT3;0,0,0;False;1;FLOAT;0;False;1;FLOAT3;0
+Node;AmplifyShaderEditor.SimpleAddOpNode;69;-2150.053,-230.4669;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.CustomExpressionNode;100;-2020.969,-11.68128;Inherit;False;if(dis > max)${$return float3(0,0,0)@$}$$if(dis < min)${$return normal@$}$float val = (max - dis) / (max - min)@$$return lerp(float3(0,0,0), normal, val)@$$$$$$$$$;3;False;4;True;max;FLOAT;0;In;;Float;False;True;min;FLOAT;0;In;;Float;False;True;dis;FLOAT;0;In;;Float;False;True;normal;FLOAT3;0,0,0;In;;Float;False;Hight Mul;True;False;0;4;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT3;0,0,0;False;1;FLOAT3;0
+Node;AmplifyShaderEditor.SamplerNode;44;-1439.265,-396.5344;Inherit;True;Property;_Texture;Texture;0;0;Create;True;0;0;False;0;None;34685b7c2d8997347906dccf3f45db7d;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;0;-1103.135,-129.3885;Float;False;True;2;ASEMaterialInspector;0;1;Depth test;0770190933193b94aaa3065e307002fa;True;Unlit;0;0;Unlit;2;True;0;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;True;0;False;-1;0;False;-1;True;False;True;0;False;-1;True;True;True;True;True;0;False;-1;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;RenderType=Opaque=RenderType;True;2;0;False;False;False;False;False;False;False;False;False;True;1;LightMode=ForwardBase;False;0;;0;0;Standard;1;Vertex Position,InvertActionOnDeselection;1;0;1;True;False;0
 WireConnection;63;0;42;1
 WireConnection;63;1;42;2
 WireConnection;63;2;42;3
-WireConnection;70;0;42;4
-WireConnection;69;0;42;4
-WireConnection;69;1;70;0
 WireConnection;51;0;63;0
 WireConnection;51;1;52;0
 WireConnection;47;0;45;0
 WireConnection;47;1;46;0
-WireConnection;50;0;51;0
-WireConnection;50;1;69;0
-WireConnection;50;4;47;0
-WireConnection;75;1;47;0
-WireConnection;78;0;69;0
-WireConnection;78;1;51;0
-WireConnection;74;0;51;0
-WireConnection;74;1;42;4
-WireConnection;74;2;75;0
-WireConnection;74;3;50;0
-WireConnection;74;4;50;0
+WireConnection;69;0;42;4
+WireConnection;69;1;101;0
+WireConnection;100;0;69;0
+WireConnection;100;1;42;4
+WireConnection;100;2;51;0
+WireConnection;100;3;47;0
 WireConnection;0;0;44;0
-WireConnection;0;1;74;0
+WireConnection;0;1;100;0
 ASEEND*/
-//CHKSM=9B6C0484C85952573B8DF0642DF62093BB037B8B
+//CHKSM=8261608C615171A1CDCCE8C77DDC2D948F3B03BB
