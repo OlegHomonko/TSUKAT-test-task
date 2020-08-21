@@ -2,14 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ArrayIdentifire : MonoBehaviour
 {
-    private int arrayID = 0;
+    [SerializeField] private float rayMaxDistance = 0.6f;
     [SerializeField] private AnimationCurve xDistanceYHeight;
+    
     private static List<int> ArrayIdList = new List<int>();
 
     private Vector3 _hitPos = Vector3.zero;
+    private int _arrayID = 0;
 
     private int GetEmptyArrayId()
     {
@@ -37,17 +40,17 @@ public class ArrayIdentifire : MonoBehaviour
 
     private void OnEnable()
     {
-        arrayID = GetEmptyArrayId();
+        _arrayID = GetEmptyArrayId();
     }
 
     private void OnDisable()
     {
-        if (ArrayIdList.Contains(arrayID))
+        if (ArrayIdList.Contains(_arrayID))
         {
-            ArrayIdList.Remove(arrayID); 
+            ArrayIdList.Remove(_arrayID); 
         }
 
-        arrayID = -1;
+        _arrayID = -1;
     }
 
     private void OnTriggerStay(Collider other)
@@ -62,7 +65,7 @@ public class ArrayIdentifire : MonoBehaviour
 
     private void SetPositionToArray()
     {
-        if (arrayID == -1)
+        if (_arrayID == -1)
         {
             return;
         }
@@ -71,13 +74,13 @@ public class ArrayIdentifire : MonoBehaviour
         var h = xDistanceYHeight.Evaluate(dis);
 
         var pos = transform.position;
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit))
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, rayMaxDistance))
         {
             pos = hit.point;
         }
 
         var v4 = new Vector4(pos.x, pos.y, pos.z, h);
-        SetGlobalShaderArray.Instance.SetArrayVector(v4, arrayID);
+        SetGlobalShaderArray.Instance.SetArrayVector(v4, _arrayID);
     }
 
     private void FixedUpdate()
