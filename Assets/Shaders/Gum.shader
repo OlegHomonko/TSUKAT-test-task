@@ -1,6 +1,6 @@
 // Made with Amplify Shader Editor
 // Available at the Unity Asset Store - http://u3d.as/y3X 
-Shader "Depth test"
+Shader "Gum"
 {
 	Properties
 	{
@@ -79,7 +79,7 @@ Shader "Depth test"
 				return _collidedObjects[i];
 				}
 				}
-				return float4(0,0,0,0);
+				return float4(vertPos,0);
 			}
 			
 			float3 outxyz( float4 xyzw )
@@ -170,22 +170,22 @@ Shader "Depth test"
 }
 /*ASEBEGIN
 Version=17101
-366;519;1553;480;4836.548;982.0974;3.918029;True;True
-Node;AmplifyShaderEditor.IntNode;110;-4151.677,-380.8226;Inherit;False;Constant;_Arraylen;Array len;3;0;Create;True;0;0;False;0;16;0;0;1;INT;0
+366;662;1553;337;4513.245;757.5754;1.333945;True;True
+Node;AmplifyShaderEditor.IntNode;110;-4167.677,-380.8226;Inherit;False;Constant;_Arraylen;Array len;3;0;Create;True;0;0;False;0;16;0;0;1;INT;0
 Node;AmplifyShaderEditor.RangedFloatNode;46;-3905.314,-609.1888;Inherit;False;Property;_MaxVertexoffset;Max Vertex offset;1;0;Create;True;0;0;False;0;0.1120346;0.2;0;2;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;101;-3952.279,-710.6054;Inherit;False;Property;_Smoothrenge;Smooth renge;2;0;Create;True;0;0;False;0;0.2324715;0.5;0;1;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleAddOpNode;69;-3584.771,-737.5159;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.GlobalArrayNode;104;-3874.127,-501.166;Inherit;False;_collidedObjects;0;16;2;False;False;0;1;False;Object;-1;4;0;INT;0;False;2;INT;0;False;1;INT;0;False;3;INT;0;False;1;FLOAT4;0
 Node;AmplifyShaderEditor.WorldPosInputsNode;52;-3900.139,15.232;Inherit;False;0;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3
-Node;AmplifyShaderEditor.CustomExpressionNode;111;-3596.867,-334.8274;Inherit;False; for(int i = 0@ i < arrayLen@ i++)${$float dis = distance(_collidedObjects[i].xyz, vertPos)@	$if(dis < range)${$return _collidedObjects[i]@$}$$}$return float4(0,0,0,0)@;4;False;4;True;array;FLOAT4;0,0,0,0;In;;Float;False;True;range;FLOAT;0;In;;Float;False;True;vertPos;FLOAT3;0,0,0;In;;Float;False;True;arrayLen;INT;0;In;;Float;False;forech;True;False;0;4;0;FLOAT4;0,0,0,0;False;1;FLOAT;0;False;2;FLOAT3;0,0,0;False;3;INT;0;False;1;FLOAT4;0
+Node;AmplifyShaderEditor.GlobalArrayNode;104;-3874.127,-501.166;Inherit;False;_collidedObjects;0;16;2;False;False;0;1;False;Object;-1;4;0;INT;0;False;2;INT;0;False;1;INT;0;False;3;INT;0;False;1;FLOAT4;0
+Node;AmplifyShaderEditor.CustomExpressionNode;111;-3596.867,-334.8274;Inherit;False; for(int i = 0@ i < arrayLen@ i++)${$float dis = distance(_collidedObjects[i].xyz, vertPos)@	$if(dis < range)${$return _collidedObjects[i]@$}$$}$return float4(vertPos,0)@;4;False;4;True;array;FLOAT4;0,0,0,0;In;;Float;False;True;range;FLOAT;0;In;;Float;False;True;vertPos;FLOAT3;0,0,0;In;;Float;False;True;arrayLen;INT;0;In;;Float;False;forech;True;False;0;4;0;FLOAT4;0,0,0,0;False;1;FLOAT;0;False;2;FLOAT3;0,0,0;False;3;INT;0;False;1;FLOAT4;0
 Node;AmplifyShaderEditor.CustomExpressionNode;106;-3290.316,-197.753;Float;False;return xyzw.xyz@;3;False;1;True;xyzw;FLOAT4;0,0,0,0;In;;Float;False;out xyz;False;False;1;-1;1;0;FLOAT4;0,0,0,0;False;1;FLOAT3;0
 Node;AmplifyShaderEditor.CustomExpressionNode;108;-3288.535,-95.8877;Inherit;False;return xyzw.w@;1;False;1;True;xyzw;FLOAT4;0,0,0,0;In;;Float;False;out w;True;False;0;1;0;FLOAT4;0,0,0,0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.WorldNormalVector;45;-2956.405,462.5495;Inherit;False;False;1;0;FLOAT3;0,0,1;False;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3
 Node;AmplifyShaderEditor.DistanceOpNode;51;-2546.769,113.2363;Inherit;False;2;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;47;-2577.416,455.42;Inherit;False;2;2;0;FLOAT3;0,0,0;False;1;FLOAT;0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.SamplerNode;44;-1708.545,-462.2325;Inherit;True;Property;_Texture;Texture;0;0;Create;True;0;0;False;0;None;34685b7c2d8997347906dccf3f45db7d;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.CustomExpressionNode;100;-2020.969,-11.68128;Inherit;False;if(dis > max)${$return float3(0,0,0)@$}$$if(dis < min)${$return normal@$}$float val = (max - dis) / (max - min)@$$return lerp(float3(0,0,0), normal, val)@$$$$$$$$$;3;False;4;True;max;FLOAT;0;In;;Float;False;True;min;FLOAT;0;In;;Float;False;True;dis;FLOAT;0;In;;Float;False;True;normal;FLOAT3;0,0,0;In;;Float;False;Hight Mul;True;False;0;4;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT3;0,0,0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;0;-1103.135,-129.3885;Float;False;True;2;ASEMaterialInspector;0;1;Depth test;0770190933193b94aaa3065e307002fa;True;Unlit;0;0;Unlit;2;True;0;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;True;0;False;-1;0;False;-1;True;False;True;0;False;-1;True;True;True;True;True;0;False;-1;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;RenderType=Opaque=RenderType;True;2;0;False;False;False;False;False;False;False;False;False;True;1;LightMode=ForwardBase;False;0;;0;0;Standard;1;Vertex Position,InvertActionOnDeselection;1;0;1;True;False;0
+Node;AmplifyShaderEditor.CustomExpressionNode;100;-2174.965,-19.78632;Inherit;False;if(dis > max)${$return float3(0,0,0)@$}$$if(dis < min)${$return normal@$}$float val = (max - dis) / (max - min)@$$return lerp(float3(0,0,0), normal, val)@$$$$$$$$$;3;False;4;True;max;FLOAT;0;In;;Float;False;True;min;FLOAT;0;In;;Float;False;True;dis;FLOAT;0;In;;Float;False;True;normal;FLOAT3;0,0,0;In;;Float;False;Hight Mul;True;False;0;4;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT3;0,0,0;False;1;FLOAT3;0
+Node;AmplifyShaderEditor.SamplerNode;44;-2251.583,-381.1821;Inherit;True;Property;_Texture;Texture;0;0;Create;True;0;0;False;0;None;34685b7c2d8997347906dccf3f45db7d;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;0;-1646.173,-48.33809;Float;False;True;2;ASEMaterialInspector;0;1;Gum;0770190933193b94aaa3065e307002fa;True;Unlit;0;0;Unlit;2;True;0;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;True;0;False;-1;0;False;-1;True;False;True;0;False;-1;True;True;True;True;True;0;False;-1;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;RenderType=Opaque=RenderType;True;2;0;False;False;False;False;False;False;False;False;False;True;1;LightMode=ForwardBase;False;0;;0;0;Standard;1;Vertex Position,InvertActionOnDeselection;1;0;1;True;False;0
 WireConnection;69;0;46;0
 WireConnection;69;1;101;0
 WireConnection;104;1;110;0
@@ -206,4 +206,4 @@ WireConnection;100;3;47;0
 WireConnection;0;0;44;0
 WireConnection;0;1;100;0
 ASEEND*/
-//CHKSM=15D0446E12CC18011930C7832937DBEA4D944AA3
+//CHKSM=0888DF7EE46D8ECE14DC1DB26B969FE4EE8CE35C
